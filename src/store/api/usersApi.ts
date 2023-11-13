@@ -36,7 +36,7 @@ const firebaseBaseQuery = async ({
         throw new Error('Id måste skickas och namn måste fyllas i!');
       }
       await updateDoc(doc(db, url, id), body);
-      return { data: body };
+      return { id: docRef.id, ...body };
     case 'DELETE':
       if (!id) {
         throw new Error('Id måste skickas');

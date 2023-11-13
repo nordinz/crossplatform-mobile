@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, RefreshControl } from 'react-native';
 import styles from './UserList.styles';
 import { useGetUsersQuery } from '../../store/api/usersApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -62,6 +62,9 @@ function UserList({ navigation }) {
       </View>
       <View>
         <FlatList
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+          }
           style={styles.flatListStyle}
           data={data}
           renderItem={({ item }) => (

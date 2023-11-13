@@ -8,9 +8,11 @@ import UserList from './src/screens/UserList/UserList';
 import { Provider, useSelector } from 'react-redux';
 import { store } from './src/store/store';
 // import CreateUser from './src/screens/CreateUser/CreateUser';
-import { UserForm } from './src/components/UserForm/UserForm';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { UserInfo } from './src/screens/UserInfo/UserInfo';
+import { UserForm } from './src/screens/UserForm/UserForm';
+import PostList from './src/screens/PostList/PostList';
 // import CreateUser from './src/screens/CreateUser/CreateUser';
 
 const UserListStack = createNativeStackNavigator();
@@ -37,10 +39,12 @@ const NavigationWrapper = () => {
             iconName = focused
               ? 'ios-information-circle'
               : 'ios-information-circle-outline';
-          } else if (route.name === 'ShowUserList') {
+          } else if (route.name === 'Users') {
             iconName = focused ? 'people-sharp' : 'people-outline';
           } else if (route.name === 'CreateUser') {
             iconName = focused ? 'person-add' : 'person-add-outline';
+          } else if (route.name === 'Posts') {
+            iconName = focused ? 'newspaper' : 'newspaper-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -49,17 +53,12 @@ const NavigationWrapper = () => {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      {/* <Tab.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{ title: 'HomeScreen' }}
-          />
-          <Tab.Screen
-            name="Details"
-            component={DetailsScreen}
-            options={{ title: 'Details' }}
-          /> */}
-      <Tab.Screen name="ShowUserList" component={UserListStackScreen} />
+      <Tab.Screen name="Users" component={UserListStackScreen} />
+      <Tab.Screen
+        name="Posts"
+        component={PostList}
+        options={{ headerShown: true }}
+      />
       <Tab.Screen
         name="CreateUser"
         component={UserForm}
