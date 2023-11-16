@@ -1,16 +1,18 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
   FlatList,
   RefreshControl,
   ActivityIndicator,
-} from 'react-native';
-import styles from './PostList.styles';
-import { useGetPostsQuery } from '../../store/api/postsApi';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, ListItem } from '@rneui/base';
-import { useSelector } from 'react-redux';
+  Modal,
+} from "react-native";
+import styles from "./PostList.styles";
+import { useGetPostsQuery } from "../../store/api/postsApi";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Button, ListItem } from "@rneui/base";
+import { useSelector } from "react-redux";
+import CreatePost from "../../components/CreatePost/CreatePost";
 
 type ItemProps = {
   text: string;
@@ -20,6 +22,7 @@ type ItemProps = {
 
 const PostList = ({ route, navigation }) => {
   const { data, isLoading, error, refetch } = useGetPostsQuery({});
+  const [showModal, setShowModal] = React.useState(false);
 
   const d = new Date().toString();
   console.log(d);
@@ -29,11 +32,12 @@ const PostList = ({ route, navigation }) => {
   const user = route?.params?.user || loggedInAs;
 
   const Item = ({ text, createdBy, createdDate }: ItemProps) => (
-    <View>
-      <Text>
-        Created by: {createdBy} | Date: {createdDate}
-      </Text>
-      <Text>{text}</Text>
+    <View style={styles.itemWrapper}>
+      <Text style={styles.userText}>Created by: {createdBy}</Text>
+      <Text style={styles.dateText}>{createdDate}</Text>
+      <View>
+        <Text style={styles.postText}>{text}</Text>
+      </View>
     </View>
   );
 
@@ -46,7 +50,7 @@ const PostList = ({ route, navigation }) => {
     );
 
   return (
-    <SafeAreaView>
+    <View style={styles.flex1}>
       <View>
         <Text style={styles.postsTitle}>POSTS</Text>
         {loggedInAs ? (
@@ -55,7 +59,7 @@ const PostList = ({ route, navigation }) => {
           <Text style={styles.postsTitle}> Not logged in</Text>
         )}
       </View>
-      <View style={styles.container}>
+      <View style={styles.flex1}>
         <FlatList
           data={data}
           keyExtractor={(item) => item.id}
@@ -75,15 +79,27 @@ const PostList = ({ route, navigation }) => {
       </View>
       <View>
         {loggedInAs ? (
-          <Button title={'Create New Post'} />
+          <Button
+            title={"Create New Post"}
+            onPress={() => setShowModal(true)}
+          />
         ) : (
           <Button
-            title={'Login to create new Post'}
-            onPress={() => navigation.navigate('UserList')}
+            title={"Login to create new Post"}
+            onPress={() => navigation.navigate("UserList")}
           />
         )}
+        <Modal
+          visible={showModal}
+          animationType={"slide"}
+          onRequestClose={() => setShowModal(false)}
+        >
+          <CreatePost onClose={() => setShowModal(false)} />
+
+          <Button title="Close" onPress={() => setShowModal(false)} />
+        </Modal>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
