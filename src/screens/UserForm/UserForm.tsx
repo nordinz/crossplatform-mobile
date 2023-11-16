@@ -1,29 +1,31 @@
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Text,
   View,
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
-} from 'react-native';
-import { Input, Button } from '@rneui/themed';
-import { useCreateUserMutation } from '../../store/api/usersApi';
-import React from 'react';
-import styles from './UserFrom.styles';
+} from "react-native";
+import { Input, Button } from "@rneui/themed";
+import { useCreateUserMutation } from "../../store/api/usersApi";
+import React from "react";
+import styles from "./UserFrom.styles";
 
 export const UserForm = (props) => {
   const { navigation } = props;
   const lastNameRef = React.useRef(null);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [createUser, { isLoading }] = useCreateUserMutation();
+  const { t } = useTranslation();
 
   const handleSubmit = () => {
-    console.log('firstName: ', firstName);
-    console.log('lastName: ', lastName);
+    console.log("firstName: ", firstName);
+    console.log("lastName: ", lastName);
 
-    if (firstName === '' || lastName === '') {
-      console.log('Invalid form!');
+    if (firstName === "" || lastName === "") {
+      console.log("Invalid form!");
 
       return;
     }
@@ -35,10 +37,10 @@ export const UserForm = (props) => {
       },
     })
       .then(() => {
-        navigation.navigate('UserList');
+        navigation.navigate("UserList");
 
-        setFirstName('');
-        setLastName('');
+        setFirstName("");
+        setLastName("");
       })
       .catch((error) => {
         console.log(error);
@@ -71,7 +73,7 @@ export const UserForm = (props) => {
           <Button
             disabled={isLoading}
             loading={isLoading}
-            title="Create user"
+            title={t("createUser")}
             onPress={() => handleSubmit()}
           ></Button>
         </View>

@@ -40,7 +40,7 @@ const CreatePost = ({ onClose }: props) => {
 
       createPost({
         post: {
-          createdBy: user?.firstName,
+          createdBy: `${user?.firstName} ${user?.lastName}`,
           createdDate: localDateString,
           text: text,
         },

@@ -24,9 +24,6 @@ const PostList = ({ route, navigation }) => {
   const { data, isLoading, error, refetch } = useGetPostsQuery({});
   const [showModal, setShowModal] = React.useState(false);
 
-  const d = new Date().toString();
-  console.log(d);
-
   const loggedInAs = useSelector((state: any) => state.auth.loggedInAs);
 
   const user = route?.params?.user || loggedInAs;
