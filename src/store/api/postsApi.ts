@@ -1,5 +1,5 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { db } from '../../../firebase-config';
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { db } from "../../../firebase-config";
 import {
   addDoc,
   collection,
@@ -7,7 +7,7 @@ import {
   doc,
   getDocs,
   updateDoc,
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
 const firebaseBaseQuery = async ({
   url,
@@ -24,36 +24,37 @@ const firebaseBaseQuery = async ({
   console.log(method);
 
   switch (method) {
-    case 'GET':
+    case "GET":
       const snapshot = await getDocs(collection(db, url));
       const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       return { data };
-    case 'POST':
+    case "POST":
       const docRef = await addDoc(collection(db, url), body);
       return { data: { id: docRef.id, ...body } };
   }
 };
 
 export const postsApi = createApi({
-  tagTypes: ['Posts'],
-  reducerPath: 'postsApi',
+  tagTypes: ["Posts"],
+  reducerPath: "postsApi",
   baseQuery: firebaseBaseQuery,
   endpoints: (builder) => ({
     createPost: builder.mutation({
       query: ({ post }) => ({
-        baseUrl: '',
-        url: 'posts',
-        method: 'POST',
+        baseUrl: "",
+        url: "posts",
+        method: "POST",
         body: post,
+        id: post.id,
       }),
-      invalidatesTags: ['Posts'],
+      invalidatesTags: ["Posts"],
     }),
     getPosts: builder.query({
       query: () => ({
-        url: 'posts',
-        method: 'GET',
+        url: "posts",
+        method: "GET",
       }),
-      providesTags: ['Posts'],
+      providesTags: ["Posts"],
     }),
   }),
 });

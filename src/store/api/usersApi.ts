@@ -1,5 +1,5 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { db } from '../../../firebase-config';
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { db } from "../../../firebase-config";
 import {
   addDoc,
   collection,
@@ -7,7 +7,7 @@ import {
   doc,
   getDocs,
   updateDoc,
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
 const firebaseBaseQuery = async ({
   url,
@@ -24,22 +24,22 @@ const firebaseBaseQuery = async ({
   console.log(method);
 
   switch (method) {
-    case 'GET':
+    case "GET":
       const snapshot = await getDocs(collection(db, url));
       const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       return { data };
-    case 'POST':
+    case "POST":
       const docRef = await addDoc(collection(db, url), body);
       return { data: { id: docRef.id, ...body } };
-    case 'PUT':
+    case "PUT":
       if (!id || !body) {
-        throw new Error('Id måste skickas och namn måste fyllas i!');
+        throw new Error("Id måste skickas och namn måste fyllas i!");
       }
       await updateDoc(doc(db, url, id), body);
       return { id: docRef.id, ...body };
-    case 'DELETE':
+    case "DELETE":
       if (!id) {
-        throw new Error('Id måste skickas');
+        throw new Error("Id måste skickas");
       }
       await deleteDoc(doc(db, url, id));
       return { data: { id } };
@@ -49,45 +49,45 @@ const firebaseBaseQuery = async ({
 };
 
 export const usersApi = createApi({
-  tagTypes: ['Users'],
-  reducerPath: 'usersApi',
+  tagTypes: ["Users"],
+  reducerPath: "usersApi",
   baseQuery: firebaseBaseQuery,
   endpoints: (builder) => ({
     updateUser: builder.mutation({
       query: ({ user }) => {
         return {
-          baseUrl: '',
-          url: 'users',
-          method: 'PUT',
+          baseUrl: "",
+          url: "users",
+          method: "PUT",
           body: user,
           id: user.id,
         };
       },
-      invalidatesTags: ['Users'],
+      invalidatesTags: ["Users"],
     }),
     createUser: builder.mutation({
       query: ({ user }) => ({
-        baseUrl: '',
-        url: 'users',
-        method: 'POST',
+        baseUrl: "",
+        url: "users",
+        method: "POST",
         body: user,
       }),
-      invalidatesTags: ['Users'],
+      invalidatesTags: ["Users"],
     }),
     getUsers: builder.query({
       query: () => ({
-        url: 'users',
-        method: 'GET',
+        url: "users",
+        method: "GET",
       }),
-      providesTags: ['Users'],
+      providesTags: ["Users"],
     }),
     deleteUser: builder.mutation({
       query: (id) => ({
-        url: 'users',
+        url: "users",
         id: id,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Users'],
+      invalidatesTags: ["Users"],
     }),
   }),
 });
